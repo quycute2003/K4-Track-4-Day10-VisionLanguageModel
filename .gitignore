@@ -1,5 +1,6 @@
 data/
 work/
+exports/
 .env
 .venv/
 __pycache__/

@@ -1,0 +1,3 @@
+# CPU-only reporting/export. No model weights or GPU libraries are needed.
+pillow
+pyyaml
