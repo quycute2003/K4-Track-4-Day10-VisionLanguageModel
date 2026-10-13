@@ -1,0 +1,18 @@
+{
+  "source_objects": 3515,
+  "target_objects": 3514,
+  "zero_area_annotations_skipped": 1,
+  "zero_area_annotations": [
+    {
+      "image_id": "vlcsnap-00058",
+      "label": "crack",
+      "yolo": [
+        0.639062,
+        0.786111,
+        0.003125,
+        0.0
+      ]
+    }
+  ],
+  "positive_boxes_repaired_after_rounding": 0
+}

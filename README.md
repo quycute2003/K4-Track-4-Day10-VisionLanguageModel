@@ -3,13 +3,21 @@
 > Track 4 · Ngày 10 · *Nhãn, auto-labeling và Vision–Language Model* · **bài cá nhân** · ≈ 4 giờ trên **Google Colab T4 (miễn phí)**
 > Bạn **tự viết** phần huấn luyện và suy luận theo pseudo code trong [`GUIDE.md`](GUIDE.md). Công cụ chia dữ liệu và chấm điểm do giảng viên viết sẵn và **không được sửa**.
 
+**Kết quả đã hoàn thành:** [`REPORT.md`](REPORT.md) của Phạm Xuân Quý (2A202602745) có số liệu E0–E3, 10 câu trả lời và 6 ảnh minh họa. F1 test E0/E1/E2/E3 lần lượt **0,0854 / 0,2444 / 0,3368 / 0,4122**. E4 chưa hoàn thành do giới hạn runtime/thời hạn nộp; E5 tùy chọn được bỏ qua. Công cụ kiểm tra bài nộp vẫn báo thiếu E4.
+
+**Bộ chạy đã triển khai:** notebook `lab_day10.ipynb` dùng mã trong `lab_vlm/` để chạy E0–E4 trên Colab, lưu checkpoint vào Drive và tạo bảng/ảnh từ kết quả thật. Xem [`COLAB_GUIDE.md`](COLAB_GUIDE.md) để đưa bộ mã lên Colab và tiếp tục khi mất phiên.
+
+**Nếu Colab hết GPU:** dùng [`lab_day10_lightning.ipynb`](lab_day10_lightning.ipynb) và [`LIGHTNING_GUIDE.md`](LIGHTNING_GUIDE.md) để xuất kết quả đã lưu trên Lightning AI bằng CPU.
+
+**Xuất ngay trên Windows:** báo cáo và ảnh đã có trong repo, chỉ cần `py -m pip install -r requirements-export.txt`, rồi `py -c "from lab_vlm.packaging import package_project; print(package_project('.', 'exports/day10-results.zip', include_report=True))"` để tạo ZIP bài nộp. Không cần GPU hoặc train lại.
+
 | File | Dùng để làm gì |
 |---|---|
 | `README.md` (file này) | Bức tranh toàn lab, dữ liệu, môi trường, cách nộp |
 | [`GUIDE.md`](GUIDE.md) | Từng bước + pseudo code + câu hỏi |
 | [`RUBRIC.md`](RUBRIC.md) | Thang điểm 100 (+10) |
-| [`REPORT.md`](REPORT.md) | Mẫu báo cáo 10 câu |
-| `lab_day10.ipynb` | Khung notebook để bạn điền mã |
+| [`REPORT.md`](REPORT.md) | Báo cáo kết quả E0–E3 và 10 câu trả lời |
+| `lab_day10.ipynb` | Notebook huấn luyện/suy luận có log và checkpoint |
 | `configs/e0…e5.yaml` | Siêu tham số từng thí nghiệm |
 | `scripts/prepare_data.py` | Tải dữ liệu, chia split |
 | `scripts/score.py` | **Trọng tài**: chấm `predictions.jsonl` |
@@ -75,15 +83,15 @@ Mọi setup dùng **QLoRA 4-bit** (NF4). Riêng ViT và `lm_head` **không lư�
 
 1. Mở `lab_day10.ipynb` trên Colab: Runtime → *Change runtime type* → **T4 GPU**. Mount Google Drive để lưu adapter (session miễn phí có thể bị ngắt).
 2. Tạo **Colab Secrets** tên `KAGGLE_USERNAME` và `KAGGLE_KEY` bằng tài khoản Kaggle của bạn. **Không ghi khoá vào notebook hay commit.**
-3. `pip install -r requirements-colab.txt`, rồi `python scripts/prepare_data.py --kaggle`.
+3. `py -m pip install -r requirements-colab.txt`, rồi `py scripts/prepare_data.py --kaggle` (Windows). Notebook Colab dùng trình thông dịch của runtime qua `sys.executable`.
    Không có tài khoản Kaggle? Tải zip dataset về tay và dùng `--zip <đường dẫn>` hoặc `--source <thư mục đã giải nén>`.
-4. `python -m pytest -q` để chắc công cụ của đề chạy đúng trên máy bạn.
+4. `py -m pytest tests student_checks -q -k "not test_report_template_has_student_markers_and_ten_questions"` để kiểm tra mã. Một kiểm tra gốc yêu cầu báo cáo còn chứa dấu điền mẫu, trái với báo cáo đã hoàn thành; chỉ bỏ chọn kiểm tra mẫu đó, giữ nguyên file của đề. Đặt `D10_RAW` tới thư mục dataset gốc để chạy thêm kiểm tra split thực tế.
 
 ## 6. Yêu cầu và cách nộp
 
 - Colab **T4 16 GB**. Mỗi lần huấn luyện ước tính **20–30 phút** (300 bước; con số ước lượng, hãy ghi thời gian thật của bạn vào báo cáo). Nếu thấy hết VRAM hoặc quá chậm, xem bảng "Khi gặp sự cố" trong GUIDE.
 - Nộp **repo GitHub công khai** (≥ 5 commit) gồm: `report/evidence/e0–e3.json`, ít nhất một `e4*.json`, `REPORT.md` đã điền, ảnh minh hoạ, notebook/mã của bạn.
-- Trước khi nộp: `python scripts/check_submission.py` không còn FAIL.
+- Trước khi nộp: `py scripts/check_submission.py` để kiểm tra. Yêu cầu gốc là không còn FAIL; bài này chủ động chấp nhận FAIL thiếu E4 như ghi trong báo cáo.
 - **Không commit**: `data/`, `work/`, `.env`, trọng số (`*.safetensors`, `*.bin`, `*.pt`).
 - **Không sửa** `scripts/` và `tests/` của đề.
 - Làm cá nhân: bạn có thể thảo luận ý tưởng, nhưng mã, số liệu và báo cáo phải là của bạn. Giảng viên đối chiếu các repo với nhau và có thể gọi **vấn đáp 5 phút**.

@@ -1,0 +1,25 @@
+{
+  "dataset_version": "d10-21e4070301",
+  "split": "test",
+  "method": "Independent medians of YOLO width, height and area, from original split labels; image dimensions 640x360",
+  "per_class": {
+    "pothole": {
+      "boxes": 121,
+      "median_area_percent": 0.41927008680000005,
+      "median_width_pixels": 46.0,
+      "median_height_pixels": 21.999959999999998
+    },
+    "crack": {
+      "boxes": 299,
+      "median_area_percent": 1.9813205034999999,
+      "median_width_pixels": 89.00031999999999,
+      "median_height_pixels": 55.00008
+    },
+    "manhole": {
+      "boxes": 163,
+      "median_area_percent": 0.6688347743,
+      "median_width_pixels": 63.00032,
+      "median_height_pixels": 24.000120000000003
+    }
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "dataset_version": "d10-21e4070301",
+  "figure_model": "e3",
+  "selection_criterion": "validation micro F1",
+  "export_from_saved_results": true,
+  "training_or_inference_performed": false,
+  "e4_evidence_present": false,
+  "e5_evidence_present": false
+}
